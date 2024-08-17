@@ -21,7 +21,7 @@ public class User {
     private String fullName;
     private String email;
     private String password;
-    private USER_ROLE role;
+    private USER_ROLE role = USER_ROLE.ROLE_CUSTOMER;
     @JsonIgnore // because when fetching the user we don't need orders list.
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "customer") // TODO
     private List<Order> orderlist = new ArrayList<>();
