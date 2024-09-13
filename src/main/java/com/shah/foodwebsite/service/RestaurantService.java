@@ -1,9 +1,9 @@
 package com.shah.foodwebsite.service;
 
 import com.shah.foodwebsite.dto.RestaurantDTO;
+import com.shah.foodwebsite.dto.request.CreateRestaurantRequest;
 import com.shah.foodwebsite.entity.Restaurant;
 import com.shah.foodwebsite.entity.User;
-import com.shah.foodwebsite.dto.request.CreateRestaurantRequest;
 
 import java.util.List;
 
@@ -16,7 +16,7 @@ public interface RestaurantService {
 
     public List<Restaurant> getAllRestaurants();
 
-    public List<Restaurant> searchRestaurants();
+    public List<Restaurant> searchRestaurants(String keyword);
 
     public Restaurant findRestaurantById(Long id) throws Exception;
 

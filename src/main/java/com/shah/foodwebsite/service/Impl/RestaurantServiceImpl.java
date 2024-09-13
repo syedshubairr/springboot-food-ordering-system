@@ -69,8 +69,8 @@ public class RestaurantServiceImpl implements RestaurantService {
     }
 
     @Override
-    public List<Restaurant> searchRestaurants() {
-        return List.of();
+    public List<Restaurant> searchRestaurants(String keyword) {
+        return restaurantRepository.findBySearchQuery(keyword);
     }
 
     @Override
@@ -100,11 +100,18 @@ public class RestaurantServiceImpl implements RestaurantService {
                 .title(restaurant.getName())
                 .Id(restaurant.getId())
                 .build();
-
-        if (user.getFavorites().contains(dto)) {
-            user.getFavorites().remove(dto);
+        boolean isFavorite = false;
+        List<RestaurantDTO> favorites = user.getFavorites();
+        for (RestaurantDTO favorite : favorites) {
+            if (favorite.getId().equals(restaurantId)) {
+                isFavorite = true;
+                break;
+            }
+        }
+        if (isFavorite) {
+            favorites.removeIf(favorite -> favorite.getId().equals(restaurantId));
         } else {
-            user.getFavorites().add(dto);
+            favorites.add(dto);
         }
         userRepository.save(user);
         return dto;
