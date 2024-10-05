@@ -32,7 +32,7 @@ public class AdminFoodController {
         return new ResponseEntity<>(food, HttpStatus.CREATED);
     }
 
-    @PostMapping("/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<MessageResponse> deleteFood(
             @PathVariable Long id,
             @RequestHeader("Authorization") String jwt) throws Exception {
@@ -44,7 +44,7 @@ public class AdminFoodController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    @PostMapping("/{id}")
+    @PutMapping("/{id}")
     public ResponseEntity<Food> updateFoodAvailabilityStatus(
             @PathVariable Long id,
             @RequestHeader("Authorization") String jwt) throws Exception {
