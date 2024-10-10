@@ -4,7 +4,9 @@ import com.shah.foodwebsite.dto.request.AddCartItemRequest;
 import com.shah.foodwebsite.dto.request.UpdateCartItemRequest;
 import com.shah.foodwebsite.entity.Cart;
 import com.shah.foodwebsite.entity.CartItem;
+import com.shah.foodwebsite.entity.User;
 import com.shah.foodwebsite.service.CartService;
+import com.shah.foodwebsite.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,6 +15,8 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api")
 public class CartController {
+    @Autowired
+    private UserService userService;
     @Autowired
     private CartService cartService;
 
@@ -47,7 +51,8 @@ public class CartController {
     public ResponseEntity<Cart> clearCart(
             @RequestHeader("Authorization") String jwt
     ) throws Exception {
-        Cart cart = cartService.clearCart(jwt);
+        User user = userService.findUserByJwtToken(jwt);
+        Cart cart = cartService.clearCart(user.getId());
         return new ResponseEntity<>(cart, HttpStatus.OK);
     }
 
@@ -55,7 +60,8 @@ public class CartController {
     public ResponseEntity<Cart> findUserCart(
             @RequestHeader("Authorization") String jwt
     ) throws Exception {
-        Cart cart = cartService.findCartByUserId(jwt);
+        User user = userService.findUserByJwtToken(jwt);
+        Cart cart = cartService.clearCart(user.getId());
         return new ResponseEntity<>(cart, HttpStatus.OK);
     }
 }
