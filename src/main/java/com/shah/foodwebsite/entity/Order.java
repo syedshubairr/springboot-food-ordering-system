@@ -33,6 +33,6 @@ public class Order {
     @OneToMany
     private List<OrderItems> orderItems;
     private int totalItem;
-    private int totalPrice;
+    private Long totalPrice;
 //    private Payment payment;
 }

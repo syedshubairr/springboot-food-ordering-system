@@ -14,6 +14,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class OrderServiceImpl implements OrderService {
@@ -60,27 +61,52 @@ public class OrderServiceImpl implements OrderService {
             OrderItems savedOrderItem = orderItemRepository.save(orderItem);
             orderItems.add(savedOrderItem);
         }
+        Long totalPrice = cartService.calculateCartTotals(cart);
         createdOrder.setOrderItems(orderItems);
-        createdOrder.setTotalPrice(cart.getTotal());
+        createdOrder.setTotalPrice(totalPrice);
+        Order savedOrder = orderRepository.save(createdOrder);
+        restaurant.getOrders().add(savedOrder);
+        return createdOrder;
     }
 
     @Override
     public Order updateOrder(Long orderId, String orderStatus) throws Exception {
-        return null;
+        Order order = findOrderById(orderId);
+        if (orderStatus.equals("OUT_FOR_DELIVERY")
+                || orderStatus.equals("DELIVERED")
+                || orderStatus.equals("COMPLETED")
+                || orderStatus.equals("PENDING")
+        ) {
+            order.setOrderStatus(orderStatus);
+            return orderRepository.save(order);
+        }
+        throw new Exception("Please select a Valid Order Status");
     }
 
     @Override
     public void cancelOrder(Long orderId) throws Exception {
-
+        Order order = findOrderById(orderId);
+        orderRepository.deleteById(orderId);
     }
 
     @Override
     public List<Order> getUsersOrders(Long userId) throws Exception {
-        return List.of();
+        return orderRepository.findByCustomerId(userId);
     }
 
     @Override
     public List<Order> getRestaurantsOrder(Long restaurantId, String orderStatus) throws Exception {
-        return List.of();
+        List<Order> orders = orderRepository.findByRestaurantId(restaurantId);
+        if (orderStatus != null) {
+            orders = orders.stream()
+                    .filter(order -> order.getOrderStatus()
+                            .equals(orderStatus)).toList();
+        }
+        return orders;
+    }
+
+    @Override
+    public Order findOrderById(Long orderId) throws Exception {
+        return orderRepository.findById(orderId).orElseThrow(() -> new Exception("Order not found."));
     }
 }

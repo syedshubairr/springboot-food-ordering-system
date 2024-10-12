@@ -1,0 +1,9 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="Food-ordering-system" type="Application" factoryName="Application">
+    <option name="MAIN_CLASS_NAME" value="com.shah.foodwebsite.OnlineFoodOrderingSystemApplication" />
+    <module name="Online-Food-Ordering-System" />
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>
